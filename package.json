@@ -1,0 +1,17 @@
+{
+  "name": "projetojs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon server.js",
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "Pamela",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
