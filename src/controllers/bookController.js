@@ -1,3 +1,4 @@
+import { author } from "../model/Author.js";
 import book from "../model/Book.js";
 
 class BookController {
@@ -13,11 +14,14 @@ class BookController {
   }
 
   static async createBook(req, res) {
+    const newBook = req.body;
     try {
-      const newBook = await book.create(req.body);
+      const findAuthor = await author.findById(newBook.author);
+      const newBookWithAuthor = { ...newBook, author: { ...findAuthor._doc } };
+      const createdBook = await book.create(newBookWithAuthor);
       res
         .status(201)
-        .json({ message: "Livro cadastrado com sucesso.", book: newBook });
+        .json({ message: "Livro cadastrado com sucesso.", book: createdBook });
     } catch (error) {
       res
         .status(500)
@@ -53,6 +57,17 @@ class BookController {
       await book.findByIdAndDelete(id);
       res.status(200).json({ message: "Livro removido com sucesso." });
     } catch (error) {
+      res.status(500).json({ message: `${error.message}` });
+    }
+  }
+
+  static async listBooksByPublisher(req, res) {
+    const publisher = req.query.publisher;
+
+    try {
+      const booksByPublisher = await book.find({ publisher: publisher });
+      res.status(200).json(booksByPublisher);
+    } catch (erro) {
       res.status(500).json({ message: `${error.message}` });
     }
   }
